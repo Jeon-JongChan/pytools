@@ -4,7 +4,7 @@ import os, sys, shutil
 ext_list = ['avi','mp4','mkv','mpg','wmv','flv','mov']
 first_path = "./"
 dst_path = "./destination/"
-
+except_dir = ["./destination","./except"]
 '''=============================== code ==============================='''
 
 ext_stack = []
@@ -14,6 +14,9 @@ if not os.path.exists(dst_path):
     os.makedirs(dst_path)
     
 for(path, dir, files) in os.walk(first_path):
+    if path in except_dir: 
+        print("============ except dir : ", path,"==============")
+        continue
     for filename in files:
         f_ext = os.path.splitext(filename)[-1]
         for ext in ext_list:
@@ -22,7 +25,7 @@ for(path, dir, files) in os.walk(first_path):
                 size = os.path.getsize(file_path)
                 mb_size = size / (1024.0 * 1024.0) #MB
                 if mb_size < 100:
-                    print(file_path + " is not movie. byte : ",size)
+                    print(file_path + " is not movie. byte : ",round(size / 1024,2),"KB" )
                     continue
                 if os.path.exists(dst_path+filename): # file 존재시
                         print(file_path+" is existed, move. destination : ", dst_path,filename+"_1")
